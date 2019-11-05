@@ -11,6 +11,7 @@ export default {
   mixins: [itemRelatedApi],
   created() {
     this.getItems();
+    this.getFactor();
   }
 };
 </script>

@@ -12,6 +12,7 @@
         />
         <q-input
           label="Price"
+          hint="Price in USD"
           type="number"
           outlined
           v-model="price"
@@ -55,6 +56,9 @@
             <q-btn round dense flat icon="add" @click.stop="showAddJewelType" />
           </template>
         </q-select>
+
+        <FileUploader @updateFiles="files=$event" ref="fileUploader" />
+
         <div class="text-right">
           <q-btn label="Add" type="submit" color="primary" />
         </div>
@@ -65,16 +69,21 @@
 
 <script>
 import { itemRelatedApi } from "../mixins/itemRelatedApi";
+import FileUploader from "../components/FileUploader";
 export default {
   name: "AddItem",
   mixins: [itemRelatedApi],
+  components: {
+    FileUploader
+  },
   data() {
     return {
       name: null,
       price: null,
       description: null,
       categories: null,
-      jewelTypes: null
+      jewelTypes: null,
+      files: []
     };
   },
   computed: {
@@ -83,6 +92,9 @@ export default {
     },
     jewelTypesOptions() {
       return this.$store.state.jewelTypes;
+    },
+    updateFiles(value) {
+      this.adminProvidedContent = value;
     }
   },
   methods: {
@@ -93,7 +105,8 @@ export default {
           price: this.price,
           description: this.description,
           categories: this.categories.map(category => category.id),
-          jewel_types: this.jewelTypes.map(jewelType => jewelType.id)
+          jewel_types: this.jewelTypes.map(jewelType => jewelType.id),
+          files: this.files
         };
         this.addItem(item).then(response => {
           if (response != null) {
@@ -109,6 +122,7 @@ export default {
       this.description = null;
       this.categories = [];
       this.jewelTypes = [];
+      this.$refs.fileUploader.clearFiles()
     },
     showAddCategory() {
       this.$q

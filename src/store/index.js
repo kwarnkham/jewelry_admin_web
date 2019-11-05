@@ -13,9 +13,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     host: 'http://127.0.0.1:8000',
-    categories: null,
-    jewelTypes: null,
-    items: null
+    categories: [],
+    jewelTypes: [],
+    items: [],
+    factor: null
   },
   mutations: {
     setCategories: (state, payload) => {
@@ -35,6 +36,9 @@ export default new Vuex.Store({
     },
     addItem: (state, payload) => {
       state.items.push(payload)
+    },
+    setFactor: (state, payload) => {
+      state.factor = payload
     }
   },
   actions: {
@@ -55,7 +59,10 @@ export default new Vuex.Store({
     },
     addItem: (context, payload) => {
       context.commit('addItem', payload)
-    }
+    },
+    setFactor: (context, payload) => {
+      context.commit('setFactor', payload)
+    },
   },
 
   // enable strict mode (adds overhead!)
